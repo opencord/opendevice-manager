@@ -118,6 +118,12 @@ lint: local-lib-go lint-mod lint-dockerfile ## Run all lint targets
 
 test: ## Run unit tests
 	@echo "Call unit test case suite"
+	@mkdir -p ./tests/results
+	@${GO} test -mod=vendor -v -coverprofile ./tests/results/go-test-coverage.out -covermode count ./... 2>&1 | tee ./tests/results/go-test-results.out ;\
+	RETURN=$$? ;\
+	${GO_JUNIT_REPORT} < ./tests/results/go-test-results.out > ./tests/results/go-test-results.xml ;\
+	${GOCOVER_COBERTURA} < ./tests/results/go-test-coverage.out > ./tests/results/go-test-coverage.xml ;\
+	exit $$RETURN
 
 sca: ## Runs static code analysis with the golangci-lint tool
 	@rm -rf ./sca-report

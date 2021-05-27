@@ -34,12 +34,7 @@ import (
 	"github.com/opencord/voltha-lib-go/v4/pkg/log"
 )
 
-var kvClient *KvStoreClient
-
-// KvStoreClient holds the KVStore info
-type KvStoreClient struct {
-	client kvstore.Client
-}
+var kvClient kvstore.Client
 
 // logger represents the log object
 var logger log.CLogger
@@ -61,8 +56,7 @@ func NewKVClient(ctx context.Context, storeType, address string, timeout time.Du
 			logger.Errorw(ctx, "etcd-server-unreachable", log.Fields{"address": address})
 			return nil, errors.New("etcd client unreachable")
 		}
-		kvClient = new(KvStoreClient)
-		kvClient.client = etcdClient
+		kvClient = etcdClient
 		return etcdClient, err
 	}
 	return nil, errors.New("unsupported-kv-store")

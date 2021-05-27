@@ -28,7 +28,7 @@ import (
 func Read(ctx context.Context, key string) (string, error) {
 	if kvClient != nil {
 		logger.Debugw(ctx, "Reading-key-value-pair-from-kv-store", log.Fields{"key": key})
-		kvPair, err := kvClient.client.Get(ctx, key)
+		kvPair, err := kvClient.Get(ctx, key)
 		if err != nil {
 			return "", err
 		}
@@ -47,7 +47,7 @@ func ReadAll(ctx context.Context, keyPrefix string) (map[string]string, error) {
 	keyValues := make(map[string]string)
 	if kvClient != nil {
 		logger.Debugw(ctx, "Reading-all-key-value-pairs-from-kv-store", log.Fields{"key-prefix": keyPrefix})
-		kvPairs, err := kvClient.client.List(ctx, keyPrefix)
+		kvPairs, err := kvClient.List(ctx, keyPrefix)
 		if err != nil {
 			return keyValues, err
 		}
@@ -68,7 +68,7 @@ func ReadAll(ctx context.Context, keyPrefix string) (map[string]string, error) {
 func Del(ctx context.Context, key string) error {
 	if kvClient != nil {
 		logger.Debugw(ctx, "Deleting-key-value-pair-from-kv-store", log.Fields{"key": key})
-		return kvClient.client.Delete(ctx, key)
+		return kvClient.Delete(ctx, key)
 	}
 	logger.Errorw(ctx, "Deleting-key-value-pair-in-kv-store-failed-because-kvstore-not-initialised", log.Fields{"key": key})
 	return errors.New("kvstore not initialised")
@@ -78,7 +78,7 @@ func Del(ctx context.Context, key string) error {
 func DelAll(ctx context.Context, keyPrefix string) error {
 	if kvClient != nil {
 		logger.Debugw(ctx, "Deleting-all-key-value-pair-from-kv-store-with-prefix", log.Fields{"key-prefix": keyPrefix})
-		return kvClient.client.DeleteWithPrefix(ctx, keyPrefix)
+		return kvClient.DeleteWithPrefix(ctx, keyPrefix)
 	}
 	logger.Errorw(ctx, "Deleting-all-key-value-pair-in-kv-store-with-prefix-failed-because-kvstore-not-initialised", log.Fields{"key-prefix": keyPrefix})
 	return errors.New("kvstore not initialised")
@@ -88,7 +88,7 @@ func DelAll(ctx context.Context, keyPrefix string) error {
 func Put(ctx context.Context, key string, val string) error {
 	if kvClient != nil {
 		logger.Debugw(ctx, "Storing-key-value-pair-in-kv-store", log.Fields{"key": key, "value": val})
-		return kvClient.client.Put(ctx, key, val)
+		return kvClient.Put(ctx, key, val)
 	}
 	logger.Errorw(ctx, "Storing-key-value-pair-in-kv-store-failed-because-kvstore-not-initialised", log.Fields{"key": key, "value": val})
 	return errors.New("kvstore not initialised")
